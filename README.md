@@ -51,6 +51,12 @@ Then ask your agent to use the skill, for example:
 
 > Use the SwiftUI MV skill and review this app's architecture boundaries.
 
+Update standalone `skills.sh` installs with:
+
+```bash
+npx skills update swiftui-mv
+```
+
 ### Option B: Claude Code Plugin
 
 This repository includes a Claude Code marketplace at
@@ -75,20 +81,61 @@ After installation, the skill is available as a namespaced plugin skill:
 /swiftui-mv:swiftui-mv
 ```
 
+Claude Code can auto-update installed marketplace plugins at startup. Enable it
+from `/plugin` -> Marketplaces -> `swiftui-mv-skill` -> Enable auto-update.
+This repository intentionally omits Claude plugin version pins, so Claude Code
+uses the Git commit SHA as the update key and can receive every committed
+marketplace update. When Claude reports that plugins were updated, run:
+
+```text
+/reload-plugins
+```
+
+For a team repository, project settings can prompt collaborators to add this
+marketplace and enable startup updates:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "swiftui-mv-skill": {
+      "source": {
+        "source": "github",
+        "repo": "ataberkturan/swiftui-mv-skill"
+      },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "swiftui-mv@swiftui-mv-skill": true
+  }
+}
+```
+
 ### Option C: Codex Plugin
 
-This repository includes a Codex plugin manifest at
-`.codex-plugin/plugin.json`. Install it with the Codex Marketplace CLI:
+This repository includes a Codex marketplace at
+`.agents/plugins/marketplace.json` and a Codex plugin manifest at
+`.codex-plugin/plugin.json`. Add the marketplace with the official Codex CLI:
 
 ```bash
-npx codex-marketplace add ataberkturan/swiftui-mv-skill --plugin --global
+codex plugin marketplace add ataberkturan/swiftui-mv-skill
 ```
 
-For a project-local install:
+If `codex plugin marketplace` is not available, update Codex to a version that
+supports plugin marketplace subcommands.
+
+Then open the Codex plugin directory and install or enable `SwiftUI MV`.
+
+Refresh the Git-backed marketplace later with:
 
 ```bash
-npx codex-marketplace add ataberkturan/swiftui-mv-skill --plugin --project
+codex plugin marketplace upgrade swiftui-mv-skill
 ```
+
+Codex currently documents marketplace refresh/upgrade rather than a third-party
+startup auto-update toggle. Keep `.codex-plugin/plugin.json` versioned and bump
+that version whenever Codex plugin content changes so Codex refreshes its
+versioned plugin cache correctly.
 
 ### Option D: Codex / OpenAI-Compatible Tools
 
@@ -118,6 +165,46 @@ cp -R swiftui-mv-skill/swiftui-mv ~/.claude/skills/
 ```
 
 Restart your agent if the skill does not appear immediately.
+
+## Keeping Installs Updated
+
+Standalone skills and marketplace plugins update through different mechanisms:
+
+- Standalone `skills.sh` installs: run `npx skills update swiftui-mv`, or
+  `npx skills update -g` for global installs.
+- Manual folder installs: pull or copy the latest `swiftui-mv/` folder from the
+  GitHub repository into your local skills directory.
+- Claude Code plugin installs: enable marketplace auto-update in `/plugin`.
+  Claude Code refreshes the marketplace at startup and prompts for
+  `/reload-plugins` when an installed plugin changes.
+- Codex plugin installs: run `codex plugin marketplace upgrade
+  swiftui-mv-skill`, then restart or reload Codex if the updated skill does not
+  appear immediately.
+
+For standalone Claude Code skills, an optional `SessionStart` hook can run
+`npx skills update -g -y` at the beginning of each session:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx skills update -g -y >/tmp/swiftui-mv-skills-update.log 2>&1 || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Only use automatic standalone updates for repositories and package sources you
+trust. This hook runs network code on session startup and may silently pull new
+skill instructions before you begin work.
 
 ## What's Inside
 
@@ -230,21 +317,23 @@ This repository is prepared for multiple distribution paths:
 
 - `skills.sh`: install with `npx skills add ... --skill swiftui-mv`.
 - Claude Code plugin marketplace: `.claude-plugin/marketplace.json` points to
-  this repository as a plugin source.
-- Codex plugin marketplace: `.codex-plugin/plugin.json` describes the plugin
-  bundle for `npx codex-marketplace`.
+  this repository as a plugin source and uses Git commit SHA updates.
+- Codex plugin marketplace: `.agents/plugins/marketplace.json` exposes the
+  plugin to Codex, and `.codex-plugin/plugin.json` describes the plugin bundle.
 - Codex/OpenAI-compatible tools: `agents/openai.yaml` lists the skill metadata.
 - `pi`: `package.json` declares the skill folder under `pi.skills`.
 
 Before publishing a release, validate local discovery:
 
 ```bash
-python3 -m json.tool .claude-plugin/plugin.json
-python3 -m json.tool .claude-plugin/marketplace.json
-python3 -m json.tool .codex-plugin/plugin.json
+python3 scripts/validate_release.py
 npx skills add . --skill swiftui-mv --list
-python3 -m unittest tests.test_audit_swiftui_mv
 ```
+
+When Codex plugin files change, bump `.codex-plugin/plugin.json` because Codex
+uses that version for its plugin cache. Claude Code intentionally has no plugin
+version pin in this repository, so Git-backed installs can update on every
+commit.
 
 ## Contributing
 

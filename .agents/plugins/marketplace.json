@@ -1,0 +1,21 @@
+{
+  "name": "swiftui-mv-skill",
+  "interface": {
+    "displayName": "SwiftUI MV Skill"
+  },
+  "plugins": [
+    {
+      "name": "swiftui-mv",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/ataberkturan/swiftui-mv-skill.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    }
+  ]
+}

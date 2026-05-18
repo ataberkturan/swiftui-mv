@@ -11,7 +11,6 @@
       "name": "swiftui-mv",
       "source": "./",
       "description": "SwiftUI MV architecture guidance for views, services, DataStore, DesignSystem, Resources, and Utils.",
-      "version": "0.1.0",
       "author": {
         "name": "Ataberk Turan"
       },
