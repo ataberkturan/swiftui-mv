@@ -80,7 +80,50 @@ struct MediumButtonStyle: ButtonStyle {
 
 // MARK: - Extensions
 extension ButtonStyle where Self == MediumButtonStyle {
-    static var medium: MediumButtonStyle { MediumButtonStyle() }
+    // MARK: - Properties
+
+    static var medium: MediumButtonStyle {
+        MediumButtonStyle()
+    }
+}
+```
+
+For underscored SwiftUI style requirements such as `_body(configuration:)`, keep the mark adjacent to the method and do not add lint-suppression comments between the mark and declaration:
+
+```swift
+struct BorderlessTextFieldStyle: TextFieldStyle {
+    // MARK: - Body
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .font(.title3)
+            .foregroundStyle(.primary)
+            .padding(.horizontal, 8)
+            .frame(minHeight: 40, alignment: .leading)
+    }
+}
+
+// MARK: - Extensions
+extension TextFieldStyle where Self == BorderlessTextFieldStyle {
+    // MARK: - Properties
+
+    static var borderless: BorderlessTextFieldStyle {
+        BorderlessTextFieldStyle()
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    @Previewable @State var emptyText = ""
+    @Previewable @State var filledText = "Just to begin"
+
+    VStack(spacing: 16) {
+        TextField("Just to begin", text: $emptyText)
+            .textFieldStyle(.borderless)
+
+        TextField("Just to begin", text: $filledText)
+            .textFieldStyle(.borderless)
+    }
+    .padding(32)
 }
 ```
 

@@ -53,7 +53,7 @@ Preview -> #Preview blocks
 Extensions -> generic convenience extension groups
 ```
 
-Do not add one mark per function. Group related methods under one `// MARK: - Methods`, skip empty sections, and keep `///` documentation comments for API behavior.
+Do not add one mark per function. Group related methods under one `// MARK: - Methods`, skip empty sections, and keep `///` documentation comments for API behavior. Put declaration-level marks directly above what they label: no blank line and no unrelated comment between `// MARK: - Body` and `var body`/`makeBody`, between `// MARK: - Extensions` and `extension`, or between `// MARK: - Preview` and `#Preview`. Do not leave internal lint-suppression comments such as `// swiftlint:disable:next identifier_name` in generated code unless the existing project explicitly requires them.
 
 ## Components Extension
 

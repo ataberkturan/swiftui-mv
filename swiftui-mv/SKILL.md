@@ -62,6 +62,8 @@ description: Build, refactor, or review SwiftUI apps using a native-first MV arc
 - Use `// MARK: - <Type> Extension` before concrete type extensions, such as `Color Extension`.
 - Use `// MARK: - Extensions` before generic convenience extensions, such as style static-member extensions.
 - Keep marks grouped and short: one `Methods` mark for a method group, no empty sections, and no long explanatory comments around marks.
+- Put declaration-level marks directly above the declaration they label: no blank line and no unrelated comment between `// MARK: - Body` and `var body`/`makeBody`, between `// MARK: - Extensions` and `extension`, or between `// MARK: - Preview` and `#Preview`.
+- Do not add internal lint-suppression comments such as `// swiftlint:disable:next identifier_name` just to make generated code pass style checks. If a temporary suppression comment is used during debugging, remove it after the build/tests pass unless the existing project explicitly requires it.
 - Keep `///` documentation comments for public API behavior; `// MARK:` is only for navigation and grouping.
 
 ## Audit Helper
