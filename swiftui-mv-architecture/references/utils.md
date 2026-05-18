@@ -53,18 +53,6 @@ View.if(...)
 View.hideKeyboardOnTap()
 ```
 
-Example extension shape:
-
-```swift
-// MARK: - String Extension
-extension String {
-    // MARK: - Properties
-    var isValidEmail: Bool {
-        contains("@")
-    }
-}
-```
-
 Utils must not contain:
 
 ```text

@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftUI MV"
+  short_description: "SwiftUI MV architecture guidance"
+  default_prompt: "Use $swiftui-mv to refactor this SwiftUI feature into MV + Services + DataStore architecture."

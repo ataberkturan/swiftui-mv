@@ -51,19 +51,6 @@ description: Build, refactor, or review SwiftUI apps using a native-first MV arc
 - Move networking, persistence, authentication, subscriptions, remote config, storage, notifications, payments, and domain actions to `Services`.
 - Keep DataStore small and app-level. It may coordinate services or smaller stores, but it should not directly implement networking, database, Keychain, image generation, secret handling, or screen-specific UI logic.
 
-## Code Marking
-
-- When writing or refactoring Swift code, always add short `// MARK: - ...` sections for real groups that exist in the type.
-- Use `// MARK: - Properties` before stored or computed properties, `@Environment`, `@State`, inputs, bindings, constants, or dependencies.
-- Use `// MARK: - Body` before SwiftUI `var body`, `makeBody(configuration:)`, ViewModifier `body(content:)`, and grouped view-building computed properties.
-- Use `// MARK: - Initialization` before custom initializers.
-- Use `// MARK: - Methods` before regular methods, action handlers, helpers, async wrappers, service methods, or utility methods.
-- Use `// MARK: - Preview` before `#Preview`.
-- Use `// MARK: - <Type> Extension` before concrete type extensions, such as `Color Extension`.
-- Use `// MARK: - Extensions` before generic convenience extensions, such as style static-member extensions.
-- Keep marks grouped and short: one `Methods` mark for a method group, no empty sections, and no long explanatory comments around marks.
-- Keep `///` documentation comments for public API behavior; `// MARK:` is only for navigation and grouping.
-
 ## Audit Helper
 
 Run:

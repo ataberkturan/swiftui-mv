@@ -39,7 +39,6 @@ import Observation
 @MainActor
 @Observable
 final class AppDataStore {
-    // MARK: - Properties
     var isUserCompletedOnboarding = false
     var isFirstLaunch = true
     var currentCredits = 0

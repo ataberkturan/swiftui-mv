@@ -24,7 +24,6 @@ import Observation
 @MainActor
 @Observable
 final class AppDataStore {
-    // MARK: - Properties
     var isUserCompletedOnboarding = false
     var currentCredits = 0
     var isSubscribed = false
@@ -42,13 +41,11 @@ import Observation
 
 @Observable
 final class GenerationService {
-    // MARK: - Properties
     var cachedResults: [GenerationResult] = []
 
     @ObservationIgnored
     private let apiClient: APIClient
 
-    // MARK: - Initialization
     init(apiClient: APIClient) {
         self.apiClient = apiClient
     }
@@ -68,12 +65,10 @@ import SwiftUI
 
 @main
 struct WallpaperApp: App {
-    // MARK: - Properties
     @State private var appDataStore = AppDataStore()
     @State private var authService = AuthService()
     @State private var generationService = GenerationService()
 
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -93,14 +88,12 @@ Read injected Observation objects with typed `@Environment`.
 
 ```swift
 struct HomeView: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
     @Environment(GenerationService.self) private var generationService
 
     @State private var prompt = ""
     @State private var state: HomeState = .idle
 
-    // MARK: - Body
     var body: some View {
         VStack {
             Text("Credits: \(appDataStore.currentCredits)")
@@ -121,10 +114,8 @@ Use optional typed environment when the dependency is truly optional or when fal
 
 ```swift
 struct DebugBannerView: View {
-    // MARK: - Properties
     @Environment(RemoteConfigService.self) private var remoteConfig: RemoteConfigService?
 
-    // MARK: - Body
     var body: some View {
         if remoteConfig?.isDebugBannerEnabled == true {
             Text("Debug")
@@ -143,10 +134,8 @@ Direct read, no binding needed:
 
 ```swift
 struct CreditBadge: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
 
-    // MARK: - Body
     var body: some View {
         Text("\(appDataStore.currentCredits)")
     }
@@ -157,10 +146,8 @@ Binding needed for controls:
 
 ```swift
 struct SettingsView: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
 
-    // MARK: - Body
     var body: some View {
         @Bindable var appDataStore = appDataStore
 
@@ -173,10 +160,8 @@ For a direct observable input:
 
 ```swift
 struct ProfileEditorView: View {
-    // MARK: - Properties
     @Bindable var profile: UserProfile
 
-    // MARK: - Body
     var body: some View {
         TextField("Display name", text: $profile.displayName)
     }
@@ -201,7 +186,6 @@ Use `@Observable` for shared app/domain state that multiple views or services ne
 ```swift
 @Observable
 final class CreditStore {
-    // MARK: - Properties
     var currentCredits = 0
     var dailyUsageLimit = 0
     var lastCreditResetDate: Date?
@@ -240,7 +224,6 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppDataStore {
-    // MARK: - Properties
     var currentCredits = 3
     var isSubscribed = false
 }
@@ -248,7 +231,6 @@ final class AppDataStore {
 @MainActor
 @Observable
 final class GenerationService {
-    // MARK: - Methods
     func generate(prompt: String) async throws -> GenerationResult {
         // business logic
     }
@@ -256,11 +238,9 @@ final class GenerationService {
 
 @main
 struct WallpaperApp: App {
-    // MARK: - Properties
     @State private var appDataStore = AppDataStore()
     @State private var generationService = GenerationService()
 
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             HomeView()
@@ -271,14 +251,12 @@ struct WallpaperApp: App {
 }
 
 struct HomeView: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
     @Environment(GenerationService.self) private var generationService
 
     @State private var prompt = ""
     @State private var state: HomeState = .idle
 
-    // MARK: - Body
     var body: some View {
         VStack {
             TextField("Prompt", text: $prompt)
@@ -294,15 +272,12 @@ Avoid this for new code in the SwiftUI MV architecture:
 
 ```swift
 final class AppDataStore: ObservableObject {
-    // MARK: - Properties
     @Published var currentCredits = 3
 }
 
 struct WallpaperApp: App {
-    // MARK: - Properties
     @StateObject private var appDataStore = AppDataStore()
 
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             HomeView()
@@ -312,7 +287,6 @@ struct WallpaperApp: App {
 }
 
 struct HomeView: View {
-    // MARK: - Properties
     @EnvironmentObject private var appDataStore: AppDataStore
 }
 ```

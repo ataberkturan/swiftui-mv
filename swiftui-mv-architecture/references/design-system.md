@@ -64,7 +64,6 @@ Correct:
 
 ```swift
 struct MediumButtonStyle: ButtonStyle {
-    // MARK: - Body
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.caption)
@@ -78,7 +77,6 @@ struct MediumButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Extensions
 extension ButtonStyle where Self == MediumButtonStyle {
     static var medium: MediumButtonStyle { MediumButtonStyle() }
 }
@@ -116,7 +114,6 @@ Correct:
 
 ```swift
 struct StatCard: View {
-    // MARK: - Properties
     let model: StatCardModel
 }
 ```
@@ -125,7 +122,6 @@ Wrong:
 
 ```swift
 struct ProfileCard: View {
-    // MARK: - Properties
     @Environment(UserSession.self) private var session
 }
 ```

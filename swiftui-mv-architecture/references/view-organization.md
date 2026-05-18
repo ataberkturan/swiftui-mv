@@ -39,22 +39,6 @@ top-level screen composition
 
 Keep the main file readable and high-level. Move small view fragments to `HomeView+Components.swift`. Move larger view-specific nested subviews to dedicated `HomeView+ComponentName.swift` files. Move local actions and helpers to `HomeView+Extensions.swift`.
 
-## Code Marking
-
-Generated Swift should use compact `// MARK: - ...` sections whenever the group exists:
-
-```text
-Properties -> stored or computed properties, inputs, dependencies, @Environment, @State, @Binding
-Body -> var body, makeBody(configuration:), body(content:), grouped view-building computed properties
-Initialization -> custom init blocks
-Methods -> action handlers, helpers, async wrappers, service methods, utility methods
-Preview -> #Preview blocks
-<Type> Extension -> concrete extensions such as Color Extension
-Extensions -> generic convenience extension groups
-```
-
-Do not add one mark per function. Group related methods under one `// MARK: - Methods`, skip empty sections, and keep `///` documentation comments for API behavior.
-
 ## Components Extension
 
 `Views/HomeView/Extensions/HomeView+Components.swift` contains small UI fragments that belong only to `HomeView`.
@@ -62,9 +46,7 @@ Do not add one mark per function. Group related methods under one `// MARK: - Me
 Correct:
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
-    // MARK: - Body
     private var headerSection: some View {
         VStack {
             Text("Title")
@@ -72,7 +54,6 @@ extension HomeView {
         }
     }
 
-    // MARK: - Methods
     private func optionRow(title: String, isSelected: Bool) -> some View {
         HStack {
             Text(title)
@@ -100,12 +81,10 @@ Generic or reusable -> DesignSystem
 Examples:
 
 ```swift
-// MARK: - Body
 private var headerSection: some View {
     ...
 }
 
-// MARK: - Methods
 private func actionButton(title: String) -> some View {
     ...
 }
@@ -124,17 +103,14 @@ Views/HomeView/Extensions/HomeView+PromptDockView.swift
 Example:
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
     private struct PromptDockView: View {
-        // MARK: - Properties
         @Binding var prompt: String
         let isGenerating: Bool
         let onGenerate: () -> Void
 
         @State private var isExpanded = false
 
-        // MARK: - Body
         var body: some View {
             VStack {
                 TextField("Describe a wallpaper", text: $prompt)
@@ -156,7 +132,6 @@ Do not create top-level screen-specific `struct View` components in a view exten
 
 ```swift
 struct PromptDockView: View {
-    // MARK: - Body
     var body: some View {
         Text("Prompt")
     }
@@ -166,10 +141,8 @@ struct PromptDockView: View {
 Scope screen-specific nested views under the parent:
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
     private struct PromptDockView: View {
-        // MARK: - Body
         var body: some View {
             Text("Prompt")
         }
@@ -193,9 +166,7 @@ screen-local behavior
 Example:
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
-    // MARK: - Methods
     func handleGenerateButtonTap() {
         Task {
             await generateWallpaper()

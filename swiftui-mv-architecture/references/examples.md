@@ -88,9 +88,7 @@ This is an example. Do not create unused folders just for the sake of structure.
 ## Correct Local Components
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
-    // MARK: - Body
     private var headerSection: some View {
         VStack(alignment: .leading) {
             Text("Wallpaper")
@@ -98,7 +96,6 @@ extension HomeView {
         }
     }
 
-    // MARK: - Methods
     private func modeButton(title: String, isSelected: Bool) -> some View {
         Button(title) {
             selectedMode = title
@@ -119,17 +116,14 @@ Views/HomeView/Extensions/HomeView+PromptDockView.swift
 ```
 
 ```swift
-// MARK: - HomeView Extension
 extension HomeView {
     private struct PromptDockView: View {
-        // MARK: - Properties
         @Binding var prompt: String
         let isGenerating: Bool
         let onGenerate: () -> Void
 
         @State private var isExpanded = false
 
-        // MARK: - Body
         var body: some View {
             VStack(spacing: 12) {
                 TextField("Describe a wallpaper", text: $prompt)
@@ -149,7 +143,6 @@ Use this pattern when the UI is too large for a computed property but still belo
 
 ```swift
 struct PromptDockView: View {
-    // MARK: - Body
     var body: some View {
         Text("Prompt")
     }
@@ -164,20 +157,17 @@ Do not place top-level screen-specific `struct View` declarations inside a view'
 @MainActor
 @Observable
 final class AuthService {
-    // MARK: - Methods
     func signIn(email: String, password: String) async throws {
         ...
     }
 }
 
 struct LoginView: View {
-    // MARK: - Properties
     @Environment(AuthService.self) private var authService
     @State private var email = ""
     @State private var password = ""
     @State private var state: LoginState = .idle
 
-    // MARK: - Body
     var body: some View {
         Button("Sign In") {
             handleSignInTap()
@@ -190,7 +180,6 @@ struct LoginView: View {
 
 ```swift
 struct LoginView: View {
-    // MARK: - Properties
     private let authService = AuthService()
 }
 ```
@@ -205,7 +194,6 @@ import Observation
 @MainActor
 @Observable
 final class AppDataStore {
-    // MARK: - Properties
     var isUserCompletedOnboarding = false
     var isFirstLaunch = true
     var currentCredits = 0
@@ -223,7 +211,6 @@ import SwiftUI
 @MainActor
 @Observable
 final class AuthService {
-    // MARK: - Methods
     func signIn(email: String, password: String) async throws {
         ...
     }
@@ -231,11 +218,9 @@ final class AuthService {
 
 @main
 struct WallpaperApp: App {
-    // MARK: - Properties
     @State private var appDataStore = AppDataStore()
     @State private var authService = AuthService()
 
-    // MARK: - Body
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -246,12 +231,10 @@ struct WallpaperApp: App {
 }
 
 struct LoginView: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
     @Environment(AuthService.self) private var authService
     @State private var email = ""
 
-    // MARK: - Body
     var body: some View {
         TextField("Email", text: $email)
     }
@@ -262,23 +245,12 @@ struct LoginView: View {
 
 ```swift
 struct SettingsView: View {
-    // MARK: - Properties
     @Environment(AppDataStore.self) private var appDataStore
 
-    // MARK: - Body
     var body: some View {
         @Bindable var appDataStore = appDataStore
         Toggle("Subscribed", isOn: $appDataStore.isSubscribed)
     }
-}
-```
-
-## Correct Preview Marking
-
-```swift
-// MARK: - Preview
-#Preview {
-    SettingsView()
 }
 ```
 
@@ -287,12 +259,10 @@ struct SettingsView: View {
 ```swift
 @Observable
 final class AppDataStore {
-    // MARK: - Properties
     var searchText = ""
     var isSheetPresented = false
     var selectedTabAnimationProgress = 0.0
 
-    // MARK: - Methods
     func fetchRemoteConfigDirectlyFromSupabase() async {
         ...
     }

@@ -99,7 +99,6 @@ Wrong:
 
 ```swift
 struct LoginView: View {
-    // MARK: - Properties
     private let authService = AuthService()
 }
 ```
@@ -108,7 +107,6 @@ Correct for an observable service:
 
 ```swift
 struct LoginView: View {
-    // MARK: - Properties
     @Environment(AuthService.self) private var authService
 }
 ```
@@ -127,7 +125,6 @@ import Observation
 @MainActor
 @Observable
 final class AuthService {
-    // MARK: - Methods
     func signIn(email: String, password: String) async throws {
         ...
     }
